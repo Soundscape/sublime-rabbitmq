@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package >
+  <metadata>
+    <id>Sublime.RabbitMQ</id>
+    <version>0.1.0</version>
+    <authors>Shaun Farrell</authors>
+    <owners>Shaun Farrell</owners>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Simple topic pub/sub client for RabbitMQ.</description>
+    <releaseNotes>Initial release</releaseNotes>
+    <copyright>Copyright 2015</copyright>
+    <tags>Service Host</tags>
+    <dependencies>
+	  <dependency id="Newtonsoft.Json" version="6.0.8" />
+	  <dependency id="RabbitMQ.Client" version="3.5.3" />
+    </dependencies>
+  </metadata>
+  <files>
+	<file src="bin/Release/Sublime.RabbitMQ.dll" target="lib" />
+  </files>
+</package>
