@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>Sublime.RabbitMQ</id>
-    <version>0.1.0</version>
+    <version>1.0.1</version>
     <authors>Shaun Farrell</authors>
     <owners>Shaun Farrell</owners>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
@@ -11,8 +11,8 @@
     <copyright>Copyright 2015</copyright>
     <tags>Service Host</tags>
     <dependencies>
-	  <dependency id="Newtonsoft.Json" version="6.0.8" />
-	  <dependency id="RabbitMQ.Client" version="3.5.3" />
+	  <dependency id="Newtonsoft.Json" version="8.0.3" />
+	  <dependency id="RabbitMQ.Client" version="3.6.1" />
     </dependencies>
   </metadata>
   <files>
