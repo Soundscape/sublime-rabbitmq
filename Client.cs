@@ -59,7 +59,7 @@ namespace Sublime.RabbitMQ
 			channel.BasicPublish (this.config.Exchange, route, null, buffer);
 		}
 
-		public void Subscribe (string[] routes) {
+		public void Subscribe (params string[] routes) {
 			foreach (var route in routes)
 				this.channel.QueueBind (this.queue, this.config.Exchange, route);
 
