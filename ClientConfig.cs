@@ -10,6 +10,7 @@ namespace Sublime.RabbitMQ
         public string Exchange { get; set; }
         public bool DeclareExchange { get; set; }
         public string QueueName { get; set; }
+        public bool BindQueues { get; set; }
 
 		#endregion
 	}

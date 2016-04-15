@@ -50,6 +50,5 @@
     <None Include="README.md" />
     <None Include="LICENSE" />
     <None Include=".gitignore" />
-    <None Include="Sublime.RabbitMQ.nuspec" />
   </ItemGroup>
 </Project>

@@ -65,8 +65,9 @@ namespace Sublime.RabbitMQ
 
         public void Subscribe(params string[] routes)
         {
-            foreach (var route in routes)
-                this.channel.QueueBind(this.queue, this.config.Exchange, route);
+            if (this.config.BindQueues)
+                foreach (var route in routes)
+                    this.channel.QueueBind(this.queue, this.config.Exchange, route);
 
             this.consumer = new QueueingBasicConsumer(this.channel);
             this.channel.BasicConsume(this.queue, true, this.consumer);
