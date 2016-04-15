@@ -3,6 +3,8 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sublime.RabbitMQ", "Sublime.RabbitMQ.csproj", "{2F1F328E-8566-4671-BBF7-ED8ED70C7F8F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleApplication1", "..\ConsoleApplication1\ConsoleApplication1.csproj", "{DC728C74-B99A-42E6-9000-4E87BA6E1422}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -13,6 +15,10 @@ Global
 		{2F1F328E-8566-4671-BBF7-ED8ED70C7F8F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2F1F328E-8566-4671-BBF7-ED8ED70C7F8F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2F1F328E-8566-4671-BBF7-ED8ED70C7F8F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DC728C74-B99A-42E6-9000-4E87BA6E1422}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DC728C74-B99A-42E6-9000-4E87BA6E1422}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DC728C74-B99A-42E6-9000-4E87BA6E1422}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DC728C74-B99A-42E6-9000-4E87BA6E1422}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

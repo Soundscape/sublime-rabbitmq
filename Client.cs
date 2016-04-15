@@ -8,108 +8,120 @@ using RabbitMQ.Client.Events;
 
 namespace Sublime.RabbitMQ
 {
-	public class Client : IDisposable
-	{
-		#region Members
+    public class Client : IDisposable
+    {
+        #region Members
 
-		ClientConfig config;
-		IConnectionFactory factory;
-		IConnection connection;
-		IModel channel;
-		QueueDeclareOk queue;
-		QueueingBasicConsumer consumer;
-		CancellationTokenSource source;
-		CancellationToken token;
-		Task dequeue;
+        ClientConfig config;
+        IConnectionFactory factory;
+        IConnection connection;
+        IModel channel;
+        QueueDeclareOk queue;
+        QueueingBasicConsumer consumer;
+        CancellationTokenSource source;
+        CancellationToken token;
+        Task dequeue;
 
-		#endregion
+        #endregion
 
-		#region Events
+        #region Events
 
-		public delegate void MessageHandler(object sender, MessageEventArgs args);
-		public event MessageHandler OnMessage;
+        public delegate void MessageHandler(object sender, MessageEventArgs args);
+        public event MessageHandler OnMessage;
 
-		#endregion
+        #endregion
 
-		#region Constructors
+        #region Constructors
 
-		public Client (ClientConfig config)
-		{
-			this.config = config;
-			this.factory = new ConnectionFactory () {
-				HostName = this.config.HostName
-			};
+        public Client(ClientConfig config)
+        {
+            this.config = config;
+            this.factory = new ConnectionFactory()
+            {
+                HostName = this.config.HostName
+            };
 
-			this.connection = this.factory.CreateConnection ();
-			this.channel = this.connection.CreateModel ();
+            this.connection = this.factory.CreateConnection();
+            this.channel = this.connection.CreateModel();
 
-			this.channel.ExchangeDeclare (this.config.Exchange, "topic");
-			this.queue = this.channel.QueueDeclare ();
+            if (this.config.DeclareExchange)
+                this.channel.ExchangeDeclare(this.config.Exchange, "topic");
 
-			this.source = new CancellationTokenSource ();
-			this.token = this.source.Token;
-		}
+            this.queue = this.channel.QueueDeclare(this.config.QueueName, true, false, false, null);
 
-		#endregion
+            this.source = new CancellationTokenSource();
+            this.token = this.source.Token;
+        }
 
-		#region Methods
+        #endregion
 
-		public void Publish(string route, object message) {
-			var buffer = Encoding.UTF8.GetBytes (JsonConvert.SerializeObject (message));
-			channel.BasicPublish (this.config.Exchange, route, null, buffer);
-		}
+        #region Methods
 
-		public void Subscribe (params string[] routes) {
-			foreach (var route in routes)
-				this.channel.QueueBind (this.queue, this.config.Exchange, route);
+        public void Publish(string route, object message)
+        {
+            var buffer = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(message));
+            channel.BasicPublish(this.config.Exchange, route, null, buffer);
+        }
 
-			this.consumer = new QueueingBasicConsumer (this.channel);
-			this.channel.BasicConsume (this.queue, true, this.consumer);
+        public void Subscribe(params string[] routes)
+        {
+            foreach (var route in routes)
+                this.channel.QueueBind(this.queue, this.config.Exchange, route);
 
-			this.dequeue = Task.Factory.StartNew (() => {
-				while (true) {
-					if (this.token.IsCancellationRequested)
-						this.token.ThrowIfCancellationRequested();
+            this.consumer = new QueueingBasicConsumer(this.channel);
+            this.channel.BasicConsume(this.queue, true, this.consumer);
 
-					var args = (BasicDeliverEventArgs)this.consumer.Queue.Dequeue ();
-					var message = JsonConvert.DeserializeObject (Encoding.UTF8.GetString (args.Body));
+            this.dequeue = Task.Factory.StartNew(() =>
+            {
+                while (true)
+                {
+                    if (this.token.IsCancellationRequested)
+                        this.token.ThrowIfCancellationRequested();
 
-					if (null != this.OnMessage)
-						this.OnMessage (this, new MessageEventArgs (args.RoutingKey, message));
-				}
-			}, this.source.Token);
-		}
+                    var args = (BasicDeliverEventArgs)this.consumer.Queue.Dequeue();
+                    var message = JsonConvert.DeserializeObject(Encoding.UTF8.GetString(args.Body));
 
-		public void Dispose() {
-			if (null != this.dequeue) {
-				this.source.Cancel ();
+                    if (null != this.OnMessage)
+                        this.OnMessage(this, new MessageEventArgs(args.RoutingKey, message));
+                }
+            }, this.source.Token);
+        }
 
-				try {
-					this.dequeue.Wait();
-				}
-				catch (AggregateException) {
-				}
-				finally {
-					this.source.Dispose ();
-					this.dequeue.Dispose ();
+        public void Dispose()
+        {
+            if (null != this.dequeue)
+            {
+                this.source.Cancel();
 
-					this.dequeue = null;
-					this.source = null;
-				}
-			}
+                try
+                {
+                    this.dequeue.Wait();
+                }
+                catch (AggregateException)
+                {
+                }
+                finally
+                {
+                    this.source.Dispose();
+                    this.dequeue.Dispose();
 
-			this.channel.Dispose ();
-			this.connection.Dispose ();
+                    this.dequeue = null;
+                    this.source = null;
+                }
+            }
 
-			this.channel = null;
-			this.config = null;
-			this.factory = null;
-			this.config = null;
-			this.queue = null;
-			this.consumer = null;
-		}
+            this.channel.Dispose();
+            this.connection.Dispose();
 
-		#endregion
-	}
+            this.channel = null;
+            this.config = null;
+            this.factory = null;
+            this.config = null;
+            this.queue = null;
+            this.consumer = null;
+        }
+
+        #endregion
+    }
 }
 
