@@ -44,10 +44,12 @@ namespace Sublime.RabbitMQ
             this.connection = this.factory.CreateConnection();
             this.channel = this.connection.CreateModel();
 
-            if (this.config.DeclareExchange)
-                this.channel.ExchangeDeclare(this.config.Exchange, "topic");
-
             this.queue = this.channel.QueueDeclare(this.config.QueueName, true, false, false, null);
+
+            if (this.config.DeclareExchange)
+                this.channel.ExchangeDeclare(this.config.Exchange, "topic", true, false, null);
+
+            this.channel.QueueBind(this.config.QueueName, this.config.Exchange, this.config.RoutingKey ?? string.Empty);
 
             this.source = new CancellationTokenSource();
             this.token = this.source.Token;
