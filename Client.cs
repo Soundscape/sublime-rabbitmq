@@ -81,7 +81,9 @@ namespace Sublime.RabbitMQ
                     if (this.token.IsCancellationRequested)
                         this.token.ThrowIfCancellationRequested();
 
-                    var args = (BasicDeliverEventArgs)this.consumer.Queue.Dequeue();
+                    var args = (BasicDeliverEventArgs)this.consumer.Queue.DequeueNoWait(null);
+                    if (null == args) continue;
+
                     var message = JsonConvert.DeserializeObject(Encoding.UTF8.GetString(args.Body));
 
                     if (null != this.OnMessage)
