@@ -96,23 +96,14 @@ namespace Sublime.RabbitMQ
         {
             if (null != this.dequeue)
             {
-                this.source.Cancel();
-
-                try
-                {
-                    this.dequeue.Wait();
-                }
-                catch (AggregateException)
-                {
-                }
-                finally
+                this.token.Register(() =>
                 {
                     this.source.Dispose();
-                    this.dequeue.Dispose();
-
                     this.dequeue = null;
                     this.source = null;
-                }
+                });
+
+                this.source.Cancel();
             }
 
             this.channel.Dispose();
