@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>Sublime.RabbitMQ</id>
-    <version>1.0.6</version>
+    <version>1.0.7</version>
     <authors>Shaun Farrell</authors>
     <owners>Shaun Farrell</owners>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>

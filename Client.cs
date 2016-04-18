@@ -76,6 +76,9 @@ namespace Sublime.RabbitMQ
 
             this.dequeue = Task.Factory.StartNew(() =>
             {
+                if (this.token.IsCancellationRequested)
+                    this.token.ThrowIfCancellationRequested();
+
                 while (true)
                 {
                     if (this.token.IsCancellationRequested)
